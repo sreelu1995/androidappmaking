@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>"firefox os app-simple game"</title>
+  
+  <h1 style="color:blue;font-family:Arial;text-align:center"><strong><u>BOUNCING BALL</u></strong></h1>
+
+</head>
+
+  <body style="background-color: pink;body-align:center" >
+  <!--div style="background-image:url('bgballgame.jpeg');width:1000px;height:500px;"></div-->
+  <img id="image" src="bgballgame.jpeg" style="display:none"></img>
+  <canvas id="myCanvas" width="200" height="100"
+style="border:1px solid #c3c3c3;">
+</canvas>
+
+<h1 id="score"></h1>
+
+<script>
+
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth*0.9;
+canvas.height = window.innerHeight*0.8;
+var image = document.getElementById("image");
+var keys = [];
+var x,y;
+x=y=0;
+var bx=100;
+var by=100;
+var bv=10;
+var flag = true;
+var score = 0;
+document.addEventListener("keydown",function (e) {keys[e.keyCode] = true;});
+document.addEventListener("keyup",function (e) {keys[e.keyCode] = false;});
+
+var grd = ctx.createRadialGradient(75,50,5,90,60,100);
+grd.addColorStop(0,"red");
+grd.addColorStop(1,"white");
+
+
+function draw() {
+document.getElementById("score").innerHTML = score;
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.drawImage(image,0,0,canvas.width,canvas.height);
+if(keys[37]) x--;
+else if(keys[39]) x++;
+else if(keys[38]) y--;
+else if(keys[40]) y++;
+ctx.fillStyle = "#000000";
+ctx.fillRect(x,y,75,10);
+
+renderEntity();
+
+}
+
+
+function renderEntity() {
+// Fill with gradient
+
+if(by > canvas.height) {
+  bv-=10;
+  bv *= -1;
+  flag = false;
+  by = canvas.height;
+ 
+}
+if(flag==false) {
+  bv*=0.98;
+  by-=bv;
+}
+
+if((by-15)<y+10 && bx>x && bx<x+75) {
+ bv+=5;
+  bv *= -1;
+  flag = true;
+  by = y+10+15;
+  score++;
+}
+else if(by < 0) {
+  bv *= -1;
+  flag = true;
+  by = 0;
+}
+if(flag==true) {
+  bv/=0.98;
+  by+=bv;
+}
+
+ctx.beginPath();
+ctx.arc(bx, by, 15, 0, 2*Math.PI);
+ctx.closePath();
+ctx.fillStyle = "red";
+ctx.fill();
+}
+
+setInterval(draw,17);
+
+
+
+</script>
+
+
+
+  </body>
+</html>
